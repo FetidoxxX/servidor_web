@@ -1,2 +1,0 @@
-[Sat Aug  2 03:39:46 2025] Conexión desde 127.0.0.1:59982, página solicitada: productos.html
-[Sat Aug  2 03:40:09 2025] Conexión desde 127.0.0.1:59992, página solicitada: sedes.html
