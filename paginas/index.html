@@ -2,20 +2,149 @@
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
-    <title>Página Principal</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Página Principal | Nuestra Empresa</title>
+    <!-- Favicon using a briefcase emoji for a business theme -->
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><text x='0' y='14'>💼</text></svg>"
+      type="image/svg+xml"
+    />
+    <!-- Tailwind CSS CDN for modern styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      /* Custom styles to ensure a clean layout */
+      body {
+        font-family: 'Inter', sans-serif;
+      }
+    </style>
   </head>
-  <body>
-    <h1>¡Bienvenido a nuestra empresa ficticia!</h1>
-    <p>Acceso directo sin necesidad de usuario o contraseña.</p>
-    <p>
-      Estamos emocionados de tenerte aquí. Explora nuestro sitio para conocer
-      más sobre nosotros, nuestros productos y dónde encontrarnos.
-    </p>
+  <body class="bg-gray-100 text-gray-800 antialiased leading-relaxed">
+    <div class="container mx-auto p-4 md:p-8">
+      <!-- Header with Navigation -->
+      <header
+        class="bg-white rounded-lg shadow-md p-6 mb-8 flex justify-between items-center flex-wrap gap-4"
+      >
+        <h1 class="text-3xl font-bold text-indigo-700">
+          Nuestra Empresa Ficticia
+        </h1>
+        <nav>
+          <ul class="flex flex-wrap gap-4 md:gap-8 text-lg font-medium">
+            <li>
+              <a
+                href="index.html"
+                class="text-indigo-600 hover:text-indigo-800 transition-colors duration-200"
+                >Inicio</a
+              >
+            </li>
+            <li>
+              <a
+                href="quienes.html"
+                class="text-gray-600 hover:text-indigo-800 transition-colors duration-200"
+                >Quiénes Somos</a
+              >
+            </li>
+            <li>
+              <a
+                href="productos.html"
+                class="text-gray-600 hover:text-indigo-800 transition-colors duration-200"
+                >Productos</a
+              >
+            </li>
+            <li>
+              <a
+                href="contacto.html"
+                class="text-gray-600 hover:text-indigo-800 transition-colors duration-200"
+                >Contacto</a
+              >
+            </li>
+            <li>
+              <a
+                href="sedes.html"
+                class="text-gray-600 hover:text-indigo-800 transition-colors duration-200"
+                >Sedes</a
+              >
+            </li>
+          </ul>
+        </nav>
+      </header>
 
-    <br />
-    <a href="quienes.html">¿Quiénes somos?</a> |
-    <a href="productos.html">Productos</a> |
-    <a href="contacto.html">Contacto</a> |
-    <a href="sedes.html">Sedes</a>
+      <!-- Main Content Sections -->
+      <main class="space-y-8">
+        <!-- Hero Section -->
+        <section
+          class="bg-indigo-600 text-white rounded-lg shadow-md p-8 text-center"
+        >
+          <h2 class="text-4xl font-extrabold mb-4">
+            ¡Bienvenido a Nuestra Empresa!
+          </h2>
+          <p class="text-lg mb-6 max-w-2xl mx-auto">
+            Estamos emocionados de tenerte aquí. Explora nuestro sitio para
+            conocer más sobre nosotros, nuestros productos y dónde encontrarnos.
+          </p>
+          <p class="text-sm italic">
+            Acceso directo sin necesidad de usuario o contraseña.
+          </p>
+        </section>
+
+        <!-- About Us Section -->
+        <section class="bg-white rounded-lg shadow-md p-8">
+          <h2
+            class="text-2xl font-bold text-gray-900 mb-4 border-b-2 border-indigo-500 pb-2"
+          >
+            Acerca de Nosotros
+          </h2>
+          <p class="text-gray-700">
+            Somos una empresa dedicada a la innovación y el servicio al cliente.
+            Nuestra misión es ofrecer soluciones de alta calidad que superen las
+            expectativas de nuestros clientes. Fundada en 2023, nos hemos
+            posicionado como líderes en el mercado gracias a nuestra dedicación
+            y compromiso con la excelencia.
+          </p>
+        </section>
+
+        <!-- Our Services Section -->
+        <section class="bg-white rounded-lg shadow-md p-8">
+          <h2
+            class="text-2xl font-bold text-gray-900 mb-4 border-b-2 border-indigo-500 pb-2"
+          >
+            Nuestros Servicios
+          </h2>
+          <ul class="list-disc list-inside space-y-2 text-gray-700">
+            <li>Software personalizado y desarrollo de aplicaciones web</li>
+            <li>Consultoría de sistemas y optimización de procesos</li>
+            <li>Soporte técnico 24/7 y mantenimiento preventivo</li>
+            <li>Capacitación especializada para equipos de trabajo</li>
+          </ul>
+        </section>
+
+        <!-- Contact Section -->
+        <section class="bg-white rounded-lg shadow-md p-8">
+          <h2
+            class="text-2xl font-bold text-gray-900 mb-4 border-b-2 border-indigo-500 pb-2"
+          >
+            Contáctanos
+          </h2>
+          <p class="text-gray-700">
+            Para más información, puedes contactarnos a través de nuestra
+            <a href="contacto.html" class="text-indigo-600 hover:underline"
+              >página de contacto</a
+            >
+            o por los siguientes medios:
+          </p>
+          <ul class="mt-4 space-y-1 text-gray-700">
+            <li>Email: info@empresa-ficticia.com</li>
+            <li>Teléfono: +123 456 7890</li>
+          </ul>
+        </section>
+      </main>
+
+      <!-- Footer -->
+      <footer class="mt-8 text-center text-gray-500 text-sm">
+        <p>
+          &copy; 2025 Nuestra Empresa Ficticia. Todos los derechos reservados.
+        </p>
+      </footer>
+    </div>
   </body>
 </html>

@@ -12,7 +12,7 @@
 #include <signal.h>
 
 #define MAX_CLIENTES 100
-#define MAX_PAGINAS 5
+#define MAX_PAGINAS 3
 
 // --- Declaraciones y definiciones necesarias para funcionar sin .h ---
 extern volatile sig_atomic_t servidor_corriendo;
