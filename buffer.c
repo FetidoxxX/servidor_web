@@ -1,7 +1,6 @@
 #include "servidor_web.h"
 
-// Función auxiliar para cargar el contenido de un archivo en una estructura Pagina.
-// Esta función ahora recibe la ruta completa y la utiliza directamente.
+// Función para cargar el contenido de un archivo en una estructura Pagina.
 static int cargar_archivo_en_pagina(const char *ruta_archivo, Pagina *pagina) {
     FILE *archivo = fopen(ruta_archivo, "rb");
     if (!archivo) {
@@ -54,7 +53,7 @@ void inicializar_buffer(BufferPaginas *buffer) {
         // [BUFFER] Iniciando la carga de páginas al buffer
         printf("[BUFFER] Cargando páginas iniciales en el buffer de memoria...\n");
         while ((ent = readdir(dir)) != NULL) {
-            // Asegurarse de no sobrepasar el límite del buffer
+           
             if (buffer->num_paginas >= MAX_PAGINAS) {
                 break;
             }
@@ -67,7 +66,7 @@ void inicializar_buffer(BufferPaginas *buffer) {
                     time(&nueva_pagina.ultimo_acceso);
                     buffer->paginas[buffer->num_paginas] = nueva_pagina;
                     buffer->num_paginas++;
-                    // [BUFFER] Página cargada exitosamente en el buffer
+                    // Página cargada exitosamente en el buffer
                     printf("[BUFFER] Página cargada: %s\n", nueva_pagina.nombre_archivo);
                 }
             }
@@ -78,20 +77,18 @@ void inicializar_buffer(BufferPaginas *buffer) {
     }
 }
 
-// Obtiene una página del buffer o la carga si no está.
-// La función ahora usa la ruta completa pasada por el hilo trabajador.
+// se obtiene una página del buffer o la carga si no está.
 char *obtener_pagina(BufferPaginas *buffer, const char *ruta, size_t *tam_out) {
     // 1. Quitar el '/' inicial de la ruta y obtener el nombre del archivo.
     const char *nombre_solicitado = (ruta[0] == '/') ? ruta + 1 : ruta;
     const char *extension = strrchr(nombre_solicitado, '.');
 
-    // ** Lógica para manejar imágenes **
     // Las imágenes se sirven directamente desde el disco sin usar el buffer de caché.
     if (extension && (strcmp(extension, ".png") == 0 || strcmp(extension, ".jpg") == 0 || strcmp(extension, ".jpeg") == 0 || strcmp(extension, ".gif") == 0)) {
         Pagina imagen_temp;
         char ruta_imagen[512];
 
-        // Se verifica si la ruta ya tiene el prefijo de la carpeta de imagenes
+        // Se verifica si la ruta ya tiene el prefijo de la carpeta 
         if (strncmp(nombre_solicitado, IMAGENES_DIR, strlen(IMAGENES_DIR)) != 0) {
             // Si no, se construye la ruta correcta
             snprintf(ruta_imagen, sizeof(ruta_imagen), "%s%s", IMAGENES_DIR, nombre_solicitado);
@@ -102,7 +99,7 @@ char *obtener_pagina(BufferPaginas *buffer, const char *ruta, size_t *tam_out) {
 
         if (cargar_archivo_en_pagina(ruta_imagen, &imagen_temp) == 0) {
             *tam_out = imagen_temp.tamano;
-            // [BUFFER] Imágen cargada directamente desde el disco, no se usa el buffer
+            //  Imágen cargada directamente desde el disco, no se usa el buffer
             printf("[BUFFER] Sirviendo imagen '%s' directamente del disco.\n", nombre_solicitado);
             free(imagen_temp.nombre_archivo); 
             return imagen_temp.contenido; 
@@ -117,8 +114,7 @@ char *obtener_pagina(BufferPaginas *buffer, const char *ruta, size_t *tam_out) {
     int indice_encontrado = -1;
     char ruta_completa[512];
     
-    // [BUFFER] Buscando la página en el caché...
-    // 2. Buscar la página en el búfer.
+    // Buscar la página en el búfer.
     for (int i = 0; i < buffer->num_paginas; i++) {
         if (strcmp(buffer->paginas[i].nombre_archivo, nombre_solicitado) == 0) {
             // Página encontrada en el búfer. Se actualiza el tiempo de acceso.
@@ -126,15 +122,13 @@ char *obtener_pagina(BufferPaginas *buffer, const char *ruta, size_t *tam_out) {
             *tam_out = buffer->paginas[i].tamano;
             time(&buffer->paginas[i].ultimo_acceso);
             indice_encontrado = i;
-            // [BUFFER] Página '%s' encontrada en el caché.
             printf("[BUFFER] Página '%s' encontrada en el caché.\n", nombre_solicitado);
             break;
         }
     }
     
-    // 3. Si la página no está en el búfer, cargarla y manejar el caché.
+    // Si la página no está en el búfer, cargarla y manejar el bufer.
     if (indice_encontrado == -1) {
-        // [BUFFER] Página '%s' no encontrada en el caché. Intentando cargarla desde el disco...
         printf("[BUFFER] Página '%s' no encontrada en el caché. Intentando cargarla desde el disco...\n", nombre_solicitado);
         Pagina nueva_pagina;
         snprintf(ruta_completa, sizeof(ruta_completa), "%s%s", PAGINAS_DIR, nombre_solicitado);
@@ -146,17 +140,16 @@ char *obtener_pagina(BufferPaginas *buffer, const char *ruta, size_t *tam_out) {
 
         time(&nueva_pagina.ultimo_acceso);
         
-        // 4. Verificar si hay espacio en el búfer.
+        // Verificar si hay espacio en el búfer.
         if (buffer->num_paginas < MAX_PAGINAS) {
             buffer->paginas[buffer->num_paginas] = nueva_pagina;
             contenido = nueva_pagina.contenido;
             *tam_out = nueva_pagina.tamano;
             buffer->num_paginas++;
-            // [BUFFER] Nueva página '%s' añadida al buffer.
+            //  Nueva página '%s' añadida al buffer.
             printf("[BUFFER] Nueva página '%s' añadida al buffer.\n", nueva_pagina.nombre_archivo);
         } else {
-            // 5. Aplicar el algoritmo LRU si el búfer está lleno.
-            // [BUFFER] Buffer lleno. Aplicando algoritmo LRU.
+            //Aplicar el algoritmo de reemplazo LRU si el búfer está lleno.
             printf("[BUFFER] Buffer lleno. Aplicando algoritmo LRU para reemplazar una página.\n");
             int indice_lru = 0;
             time_t menor_tiempo = buffer->paginas[0].ultimo_acceso;
@@ -167,7 +160,7 @@ char *obtener_pagina(BufferPaginas *buffer, const char *ruta, size_t *tam_out) {
                 }
             }
             
-            // 6. Reemplazar la página menos usada.
+            // Reemplazar la página menos usada.
             printf("[BUFFER] Reemplazando '%s' con '%s'\n", 
                    buffer->paginas[indice_lru].nombre_archivo, nueva_pagina.nombre_archivo);
             free(buffer->paginas[indice_lru].nombre_archivo);
@@ -182,7 +175,7 @@ char *obtener_pagina(BufferPaginas *buffer, const char *ruta, size_t *tam_out) {
     return contenido;
 }
 
-// Nueva función para imprimir el estado del búfer de páginas
+// función para imprimir el estado del búfer de páginas
 void imprimir_buffer(BufferPaginas *buffer) {
     time_t tiempo_actual;
     time(&tiempo_actual);

@@ -1,6 +1,3 @@
-// =======================================================
-// ARCHIVO: hilo_despachador.c
-// =======================================================
 #include "servidor_web.h"
 
 void *hilo_despachador(void *arg) {
@@ -8,7 +5,7 @@ void *hilo_despachador(void *arg) {
     int servidor_fd = servidor_args->servidor_fd;
     BufferPaginas *buffer_paginas = servidor_args->buffer_paginas;
 
-    // [CICLO DE VIDA] El hilo despachador se inicia.
+    //El hilo despachador se inicia.
     printf("[DESPACHADOR %p] Hilo despachador iniciado, esperando conexiones...\n", (void*)pthread_self());
 
     while (servidor_corriendo) {
@@ -18,8 +15,8 @@ void *hilo_despachador(void *arg) {
 
         if (cliente_fd < 0) {
             if (!servidor_corriendo || errno == EINVAL) {
-                // EINVAL se puede recibir si el socket ya se ha cerrado.
-                // [CICLO DE VIDA] El hilo despachador termina porque el servidor se ha detenido.
+                // EINVAL se recibe si el socket ya se ha cerrado.
+                // El hilo despachador termina porque el servidor se ha detenido.
                 printf("[DESPACHADOR %p] El socket del servidor ha sido cerrado. Terminando el hilo despachador.\n", (void*)pthread_self());
                 break;
             }
@@ -27,7 +24,6 @@ void *hilo_despachador(void *arg) {
             continue;
         }
         
-        // [CICLO DE VIDA] El hilo despachador acepta una nueva conexión.
         printf("[DESPACHADOR %p] Conexión aceptada. Se creará un hilo trabajador para atenderla.\n", (void*)pthread_self());
 
         pthread_t trabajador;
@@ -41,7 +37,6 @@ void *hilo_despachador(void *arg) {
         args_trabajador->cliente_fd = cliente_fd;
         args_trabajador->buffer_paginas = buffer_paginas;
 
-        // [CICLO DE VIDA] El hilo despachador crea un hilo trabajador.
         printf("[DESPACHADOR %p] Creando hilo trabajador para atender la petición.\n", (void*)pthread_self());
         if (pthread_create(&trabajador, NULL, hilo_trabajador, args_trabajador) != 0) {
             perror("[DESPACHADOR] Error al crear hilo trabajador");
@@ -52,7 +47,6 @@ void *hilo_despachador(void *arg) {
         }
     }
     
-    // [CICLO DE VIDA] El hilo despachador finaliza su ejecución.
     printf("[DESPACHADOR %p] Hilo despachador finalizado.\n", (void*)pthread_self());
     return NULL;
 }

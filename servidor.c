@@ -1,11 +1,6 @@
-// =======================================================
-// ARCHIVO: servidor.c 
-// =======================================================
 #include "servidor_web.h"
 
-// --- Definiciones de variables globales ---
-// Estas son las definiciones reales, no declaraciones 'extern'.
-// El header ya las declara como 'extern', así que aquí se les asigna memoria.
+//variables globales
 volatile sig_atomic_t servidor_corriendo = 1;
 int servidor_fd_global;
 BufferPaginas buffer_global;
@@ -14,7 +9,7 @@ int main(int argc, char *argv[]) {
     int puerto_escucha = PUERTO_DEFECTO;
     const char *ip_escucha = IP_DEFECTO;
     
-    // Si se provee un argumento, usarlo como puerto.
+    //argumento puerto.
     if (argc > 1) {
         puerto_escucha = atoi(argv[1]);
         if (puerto_escucha <= 0) {
@@ -23,7 +18,7 @@ int main(int argc, char *argv[]) {
         }
     }
     
-    // Si se provee un segundo argumento, usarlo como IP.
+    //argumento IP.
     if (argc > 2) {
         ip_escucha = argv[2];
     }
@@ -38,14 +33,14 @@ int main(int argc, char *argv[]) {
     sigaction(SIGINT, &sa, NULL);
     sigaction(SIGTERM, &sa, NULL);
 
-    // 1. Crear el socket
+    //Creacion del socket
     servidor_fd_global = socket(AF_INET, SOCK_STREAM, 0);
     if (servidor_fd_global < 0) {
         perror("[SERVIDOR] Error creando el socket");
         exit(EXIT_FAILURE);
     }
     
-    // Configurar el socket para la reutilización de la dirección del puerto
+    // se Configura el socket para la reutilización de la dirección del puerto
     int optval = 1;
     if (setsockopt(servidor_fd_global, SOL_SOCKET, SO_REUSEADDR, &optval, sizeof(optval)) < 0) {
         perror("[SERVIDOR] Error al configurar setsockopt");
@@ -59,7 +54,6 @@ int main(int argc, char *argv[]) {
     servidor_addr.sin_family = AF_INET;
     servidor_addr.sin_port = htons(puerto_escucha);
     
-    // Se corrige la verificación de inet_pton para proporcionar un mensaje de error más claro.
     int pton_result = inet_pton(AF_INET, ip_escucha, &servidor_addr.sin_addr);
     if (pton_result <= 0) {
         if (pton_result == 0) {
@@ -95,34 +89,25 @@ int main(int argc, char *argv[]) {
     pthread_t despachador;
     if (pthread_create(&despachador, NULL, hilo_despachador, &args) != 0) {
         perror("[SERVIDOR] Error creando hilo despachador");
+        // Los hilos se cierran cuando el proceso termina.
         close(servidor_fd_global);
         exit(EXIT_FAILURE);
     }
-
-    // El hilo principal ahora solo espera, pero no se bloquea.
-    // Los hilos se cierran cuando el proceso termina.
+    
     while(servidor_corriendo) {
         sleep(1);
     }
-    
-    // Se cierra el socket una vez más por si acaso.
-    close(servidor_fd_global);
-
     printf("[SERVIDOR] Servidor apagado limpiamente.\n");
-    
     return 0;
 }
 
-// Handler de señales para cerrar el servidor
+// funcion de señales para cerrar el servidor
 void cerrar_servidor(int signum) {
     printf("\n[SERVIDOR] Señal de terminación recibida. Cerrando el servidor...\n");
     servidor_corriendo = 0;
-    
-    // 1. Liberar la memoria del buffer de páginas
+    //Liberar la memoria del buffer de páginas
     liberar_buffer(&buffer_global);
-    
-    // 2. Usar shutdown() para desbloquear accept() de forma segura
-    //    Es más robusto que solo llamar a close().
+    //Usar shutdown() para desbloquear accept() de forma segura
     if (servidor_fd_global != -1) {
         shutdown(servidor_fd_global, SHUT_RDWR);
         close(servidor_fd_global);

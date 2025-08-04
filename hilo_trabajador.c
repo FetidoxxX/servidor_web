@@ -1,8 +1,4 @@
-// =======================================================
-// ARCHIVO: hilo_trabajador.c
-// =======================================================
 #include "servidor_web.h"
-
 
 void *hilo_trabajador(void *arg) {
     TrabajadorArgs *args = (TrabajadorArgs *)arg;
@@ -17,7 +13,6 @@ void *hilo_trabajador(void *arg) {
     inet_ntop(AF_INET, &direccion_cliente.sin_addr, ip_cliente, INET_ADDRSTRLEN);
     int puerto_cliente = ntohs(direccion_cliente.sin_port);
 
-    // [TRABAJADOR] Hilo iniciado para atender a 127.0.0.1:49874
     printf("[TRABAJADOR %p] Hilo iniciado para atender a %s:%d\n", (void*)pthread_self(), ip_cliente, puerto_cliente);
 
     ssize_t bytes_recibidos = recv(cliente_fd, buffer_peticion, sizeof(buffer_peticion) - 1, 0);
@@ -27,7 +22,6 @@ void *hilo_trabajador(void *arg) {
         char metodo[10], ruta[256];
         sscanf(linea_peticion, "%s %s", metodo, ruta);
 
-        // [TRABAJADOR] Petición para '/index.html' recibida desde 127.0.0.1:49874
         printf("[TRABAJADOR %p] Petición para '%s' recibida desde %s:%d\n", (void*)pthread_self(), ruta, ip_cliente, puerto_cliente);
 
         size_t tam_contenido = 0;
@@ -60,16 +54,13 @@ void *hilo_trabajador(void *arg) {
 
             send(cliente_fd, encabezado, strlen(encabezado), 0);
             send(cliente_fd, contenido, tam_contenido, 0);
-            // --- LÍNEA CRÍTICA A AÑADIR ---
-            // El contenido de las imágenes se carga directamente desde el disco
-            // y no es parte del buffer, por lo que su memoria DEBE ser liberada aquí.
+            // El contenido de las imágenes se carga directamente desde el disco por lo que su memoria se libera aquí.
             if (extension && (strcmp(extension, ".png") == 0 || strcmp(extension, ".jpg") == 0 || strcmp(extension, ".jpeg") == 0 || strcmp(extension, ".gif") == 0)) {
                 free(contenido);
             }
-            // [TRABAJADOR] Recurso 'index.html' servido con éxito. Estado 200 OK.
-            printf("[TRABAJADOR %p] Recurso '%s' servido con éxito. Estado 200 OK.\n", (void*)pthread_self(), ruta);
+            printf("[TRABAJADOR %p] Recurso '%s' servido con éxito. Estado OK.\n", (void*)pthread_self(), ruta);
 
-            // --- Lógica para registrar solo páginas HTML ---
+            //  registrar solo páginas
             if (extension && (strcmp(extension, ".html") == 0)) {
                 registrar_conexion(ip_cliente, puerto_cliente, ruta);
             }
@@ -86,7 +77,6 @@ void *hilo_trabajador(void *arg) {
 
     close(cliente_fd);
     free(args);
-    // [TRABAJADOR] Hilo finalizado. Conexión con 127.0.0.1:49874 cerrada.
     printf("[TRABAJADOR %p] Hilo finalizado. Conexión con %s:%d cerrada.\n", (void*)pthread_self(), ip_cliente, puerto_cliente);
     return NULL;
 }

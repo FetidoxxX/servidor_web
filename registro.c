@@ -1,8 +1,8 @@
 #include "servidor_web.h"
-// La variable se define una sola vez aquí
+
 pthread_mutex_t mutex_log = PTHREAD_MUTEX_INITIALIZER;
 
-// Se actualiza la función para incluir la página solicitada en el log
+//función para incluir la página solicitada en el log
 void registrar_conexion(const char *ip, int puerto, const char *pagina_solicitada) {
     FILE *archivo = fopen(LOG_ARCHIVO, "a");
     if (!archivo) {
