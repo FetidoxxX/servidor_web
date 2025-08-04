@@ -15,7 +15,7 @@
 #define PUERTO_DEFECTO 8000 // Puerto por defecto
 #define IP_DEFECTO "0.0.0.0"//IP por defecto escucha en todas las interfaces | (127.0.0.1)local (172.22.163.74)miMakina 
 #define MAX_CONEXIONES 10
-#define MAX_PAGINAS 3
+#define MAX_PAGINAS 7
 
 // --- Estructuras y variables globales ---
 

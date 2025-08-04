@@ -22,9 +22,7 @@
     <div class="container mx-auto p-4 md:p-8">
       <!-- Encabezado y navegación -->
       <header class="bg-white rounded-lg shadow-md p-6 mb-8 flex justify-between items-center flex-wrap gap-4">
-        <h1 class="text-3xl font-bold text-indigo-700">
-          Nuestra Empresa Ficticia
-        </h1>
+	<img src="Logo_empresa.png" alt="Logo de la empresa" class="h-12 md:h-16" />
         <nav>
           <ul class="flex flex-wrap gap-4 md:gap-8 text-lg font-medium">
             <li><a href="index.html" class="text-gray-600 hover:text-indigo-800 transition-colors duration-200">Inicio</a></li>
@@ -38,17 +36,37 @@
 
       <!-- Contenido principal -->
       <main>
-        <section class="bg-white rounded-lg shadow-md p-8">
-          <h2 class="text-2xl font-bold text-gray-900 mb-4 border-b-2 border-indigo-500 pb-2">
-            Nuestros Productos y Servicios
-          </h2>
-          <ul class="list-disc pl-6 space-y-2 text-lg text-gray-700">
-            <li>Software personalizado</li>
-            <li>Consultoría de sistemas</li>
-            <li>Soporte técnico 24/7</li>
-            <li>Desarrollo de aplicaciones web</li>
-          </ul>
-        </section>
+<section class="bg-white rounded-lg shadow-md p-8">
+  <h2 class="text-2xl font-bold text-gray-900 mb-4 border-b-2 border-indigo-500 pb-2">
+    Nuestros Productos y Servicios
+  </h2>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-gray-700 text-lg">
+    <!-- Producto 1 -->
+    <div class="flex items-start gap-4">
+      <img src="Software_personalizado.png" alt="Software Personalizado" class="max-w-[80px] h-auto" />
+      <p class="mt-2">Software personalizado</p>
+    </div>
+
+    <!-- Producto 2 -->
+    <div class="flex items-start gap-4">
+      <img src="Consultoria_sistemas.png" alt="Consultoría de Sistemas" class="max-w-[80px] h-auto" />
+      <p class="mt-2">Consultoría de sistemas</p>
+    </div>
+
+    <!-- Producto 3 -->
+    <div class="flex items-start gap-4">
+      <img src="Soporte_tecnico.jpg" alt="Soporte Técnico" class="max-w-[80px] h-auto" />
+      <p class="mt-2">Soporte técnico 24/7</p>
+    </div>
+
+    <!-- Producto 4 -->
+    <div class="flex items-start gap-4">
+      <img src="Desarrolo_web.png" alt="Desarrollo Web" class="max-w-[80px] h-auto" />
+      <p class="mt-2">Desarrollo de aplicaciones web</p>
+    </div>
+  </div>
+</section>
+
       </main>
 
       <!-- Pie de página -->

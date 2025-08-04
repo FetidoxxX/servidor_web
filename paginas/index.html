@@ -25,9 +25,11 @@
       <header
         class="bg-white rounded-lg shadow-md p-6 mb-8 flex justify-between items-center flex-wrap gap-4"
       >
-        <h1 class="text-3xl font-bold text-indigo-700">
-          Nuestra Empresa Ficticia
-        </h1>
+        <img
+          src="Logo_empresa.png"
+          alt="Logo de la empresa"
+          class="h-12 md:h-16"
+        />
         <nav>
           <ul class="flex flex-wrap gap-4 md:gap-8 text-lg font-medium">
             <li>
@@ -82,9 +84,6 @@
             Estamos emocionados de tenerte aquí. Explora nuestro sitio para
             conocer más sobre nosotros, nuestros productos y dónde encontrarnos.
           </p>
-          <p class="text-sm italic">
-            Acceso directo sin necesidad de usuario o contraseña.
-          </p>
         </section>
 
         <!-- About Us Section -->
@@ -94,48 +93,74 @@
           >
             Acerca de Nosotros
           </h2>
-          <p class="text-gray-700">
-            Somos una empresa dedicada a la innovación y el servicio al cliente.
-            Nuestra misión es ofrecer soluciones de alta calidad que superen las
-            expectativas de nuestros clientes. Fundada en 2023, nos hemos
-            posicionado como líderes en el mercado gracias a nuestra dedicación
-            y compromiso con la excelencia.
-          </p>
+          <div class="flex flex-col md:flex-row items-start gap-6">
+            <img
+              src="Acerca_nosotros.png"
+              alt="Acerca de Nosotros"
+              class="w-40 h-auto rounded-lg shadow-md"
+            />
+
+            <p class="text-gray-700 text-lg">
+              Somos una empresa dedicada a la innovación y el servicio al
+              cliente. Nuestra misión es ofrecer soluciones de alta calidad que
+              superen las expectativas de nuestros clientes. Fundada en 2023,
+              nos hemos posicionado como líderes en el mercado gracias a nuestra
+              dedicación y compromiso con la excelencia.
+            </p>
+          </div>
         </section>
 
-        <!-- Our Services Section -->
         <section class="bg-white rounded-lg shadow-md p-8">
           <h2
             class="text-2xl font-bold text-gray-900 mb-4 border-b-2 border-indigo-500 pb-2"
           >
             Nuestros Servicios
           </h2>
-          <ul class="list-disc list-inside space-y-2 text-gray-700">
-            <li>Software personalizado y desarrollo de aplicaciones web</li>
-            <li>Consultoría de sistemas y optimización de procesos</li>
-            <li>Soporte técnico 24/7 y mantenimiento preventivo</li>
-            <li>Capacitación especializada para equipos de trabajo</li>
-          </ul>
+          <div
+            class="flex flex-col md:flex-row items-center md:items-start gap-4"
+          >
+            <img
+              src="Servicios_productos.png"
+              alt="Nuestros Servicios"
+              class="max-w-[165px] h-auto"
+            />
+
+            <ul class="list-disc list-inside text-gray-700 text-lg">
+              <li>Software personalizado y desarrollo de aplicaciones web</li>
+              <li>Consultoría de sistemas y optimización de procesos</li>
+              <li>Soporte técnico 24/7 y mantenimiento preventivo</li>
+              <li>Capacitación especializada para equipos de trabajo</li>
+            </ul>
+          </div>
         </section>
 
-        <!-- Contact Section -->
         <section class="bg-white rounded-lg shadow-md p-8">
           <h2
             class="text-2xl font-bold text-gray-900 mb-4 border-b-2 border-indigo-500 pb-2"
           >
             Contáctanos
           </h2>
-          <p class="text-gray-700">
-            Para más información, puedes contactarnos a través de nuestra
-            <a href="contacto.html" class="text-indigo-600 hover:underline"
-              >página de contacto</a
-            >
-            o por los siguientes medios:
-          </p>
-          <ul class="mt-4 space-y-1 text-gray-700">
-            <li>Email: info@empresa-ficticia.com</li>
-            <li>Teléfono: +123 456 7890</li>
-          </ul>
+          <div class="flex flex-col md:flex-row items-start gap-4">
+            <img
+              src="Contacto.png"
+              alt="Contáctanos"
+              class="max-w-[165px] h-auto"
+            />
+
+            <div class="text-gray-700 text-lg space-y-2">
+              <p>
+                Para más información, puedes contactarnos a través de nuestra
+                <a href="contacto.html" class="text-indigo-600 hover:underline">
+                  página de contacto
+                </a>
+                o por los siguientes medios:
+              </p>
+              <ul class="list-disc list-inside">
+                <li>Email: info@empresa-ficticia.com</li>
+                <li>Teléfono: +123 456 7890</li>
+              </ul>
+            </div>
+          </div>
         </section>
       </main>
 
