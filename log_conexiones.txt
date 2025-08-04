@@ -27,3 +27,14 @@
 [Sun Aug  3 19:20:32 2025] Conexión desde 127.0.0.1:34882, página solicitada: /index.html
 [Sun Aug  3 20:20:09 2025] Conexión desde 127.0.0.1:46500, página solicitada: /productos.html
 [Sun Aug  3 20:20:10 2025] Conexión desde 127.0.0.1:46564, página solicitada: /index.html
+[Sun Aug  3 20:34:59 2025] Conexión desde 127.0.0.1:49692, página solicitada: /index.html
+[Sun Aug  3 20:34:59 2025] Conexión desde 127.0.0.1:49746, página solicitada: /quienes.html
+[Sun Aug  3 20:48:34 2025] Conexión desde 127.0.0.1:37166, página solicitada: /index.html
+[Sun Aug  3 20:49:21 2025] Conexión desde 127.0.0.1:37208, página solicitada: /quienes.html
+[Sun Aug  3 20:49:22 2025] Conexión desde 127.0.0.1:36350, página solicitada: /productos.html
+[Sun Aug  3 20:49:23 2025] Conexión desde 127.0.0.1:36398, página solicitada: /contacto.html
+[Sun Aug  3 20:49:24 2025] Conexión desde 127.0.0.1:36420, página solicitada: /sedes.html
+[Sun Aug  3 20:49:25 2025] Conexión desde 127.0.0.1:36424, página solicitada: /index.html
+[Sun Aug  3 20:49:57 2025] Conexión desde 127.0.0.1:36478, página solicitada: /quienes.html
+[Sun Aug  3 20:49:59 2025] Conexión desde 127.0.0.1:53558, página solicitada: /productos.html
+[Sun Aug  3 20:50:44 2025] Conexión desde 127.0.0.1:53606, página solicitada: /index.html

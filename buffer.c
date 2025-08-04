@@ -1,30 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <sys/stat.h>
-#include <dirent.h>
-#include <pthread.h>
-#include <time.h>
-
-#define PAGINAS_DIR "paginas/"
-#define IMAGENES_DIR "imagenes/"
-#define MAX_PAGINAS 3 // Tamaño del buffer modificado a 3
-
-// --- Definiciones de estructuras y funciones compartidas ---
-typedef struct {
-    char *nombre_archivo;
-    char *contenido;
-    size_t tamano;
-    time_t ultimo_acceso; // Cambiado a time_t para compatibilidad con la función time()
-} Pagina;
-
-typedef struct {
-    Pagina paginas[MAX_PAGINAS];
-    int num_paginas;
-    pthread_mutex_t mutex;
-} BufferPaginas;
-
-// ----------------------------------------------------------
+#include "servidor_web.h"
 
 // Función auxiliar para cargar el contenido de un archivo en una estructura Pagina.
 // Esta función ahora recibe la ruta completa y la utiliza directamente.
@@ -223,4 +197,17 @@ void imprimir_buffer(BufferPaginas *buffer) {
     }
     pthread_mutex_unlock(&buffer->mutex);
     printf("-------------------------------------------\n");
+}
+
+// Función para liberar toda la memoria usada por el buffer de páginas
+void liberar_buffer(BufferPaginas *buffer) {
+    pthread_mutex_lock(&buffer->mutex);
+    printf("\n[BUFFER] Liberando memoria del buffer de páginas...\n");
+    for (int i = 0; i < buffer->num_paginas; i++) {
+        free(buffer->paginas[i].nombre_archivo);
+        free(buffer->paginas[i].contenido);
+    }
+    buffer->num_paginas = 0;
+    pthread_mutex_unlock(&buffer->mutex);
+    pthread_mutex_destroy(&buffer->mutex); // Destruir el mutex
 }

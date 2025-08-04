@@ -1,48 +1,7 @@
 // =======================================================
-// ARCHIVO: hilo_despachador.c (CORREGIDO)
+// ARCHIVO: hilo_despachador.c
 // =======================================================
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <string.h>
-#include <arpa/inet.h>
-#include <pthread.h>
-#include <netinet/in.h>
-#include <errno.h>
-#include <signal.h>
-
-#define MAX_CLIENTES 100
-#define MAX_PAGINAS 3
-
-// --- Declaraciones y definiciones necesarias para funcionar sin .h ---
-extern volatile sig_atomic_t servidor_corriendo;
-
-typedef struct {
-    char *nombre_archivo;
-    char *contenido;
-    size_t tamano;
-    long long ultimo_acceso;
-} Pagina;
-
-typedef struct {
-    Pagina paginas[MAX_PAGINAS];
-    int num_paginas;
-    pthread_mutex_t mutex;
-} BufferPaginas;
-
-typedef struct {
-    int servidor_fd;
-    BufferPaginas *buffer_paginas;
-} ServidorArgs;
-
-typedef struct {
-    int cliente_fd;
-    BufferPaginas *buffer_paginas;
-} TrabajadorArgs;
-
-void *hilo_trabajador(void *arg);
-
-// ---------------------------------------------------------------------
+#include "servidor_web.h"
 
 void *hilo_despachador(void *arg) {
     ServidorArgs *servidor_args = (ServidorArgs *)arg;

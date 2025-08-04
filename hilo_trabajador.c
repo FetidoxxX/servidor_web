@@ -1,53 +1,8 @@
 // =======================================================
 // ARCHIVO: hilo_trabajador.c
 // =======================================================
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <string.h>
-#include <arpa/inet.h>
-#include <pthread.h>
-#include <netinet/in.h>
-#include <errno.h>
-#include <signal.h>
-#include <time.h>
+#include "servidor_web.h"
 
-#define TAMANO_BUFFER 4096
-#define MAX_PAGINAS 3 // Tamaño del buffer modificado a 3
-#define PAGINAS_DIR "paginas/"
-// Se define el nuevo directorio para las imágenes
-#define IMAGENES_DIR "imagenes/"
-
-// --- Definiciones de estructuras y funciones compartidas para la compilación ---
-extern volatile sig_atomic_t servidor_corriendo;
-
-typedef struct {
-    char *nombre_archivo;
-    char *contenido;
-    size_t tamano;
-    long long ultimo_acceso;
-} Pagina;
-
-typedef struct {
-    Pagina paginas[MAX_PAGINAS];
-    int num_paginas;
-    pthread_mutex_t mutex;
-} BufferPaginas;
-
-typedef struct {
-    int cliente_fd;
-    BufferPaginas *buffer_paginas;
-} TrabajadorArgs;
-
-// Declara la variable global
-extern BufferPaginas buffer_global;
-
-// Declaraciones de funciones
-char *obtener_pagina(BufferPaginas *buffer, const char *ruta, size_t *tam_out);
-void registrar_conexion(const char *ip, int puerto, const char *pagina_solicitada);
-void imprimir_buffer(BufferPaginas *buffer); // Declaración de la nueva función
-
-// -----------------------------------------------------------------------------------
 
 void *hilo_trabajador(void *arg) {
     TrabajadorArgs *args = (TrabajadorArgs *)arg;
@@ -58,7 +13,8 @@ void *hilo_trabajador(void *arg) {
     struct sockaddr_in direccion_cliente;
     socklen_t longitud_cliente = sizeof(direccion_cliente);
     getpeername(cliente_fd, (struct sockaddr *)&direccion_cliente, &longitud_cliente);
-    char *ip_cliente = inet_ntoa(direccion_cliente.sin_addr);
+    char ip_cliente[INET_ADDRSTRLEN];
+    inet_ntop(AF_INET, &direccion_cliente.sin_addr, ip_cliente, INET_ADDRSTRLEN);
     int puerto_cliente = ntohs(direccion_cliente.sin_port);
 
     // [TRABAJADOR] Hilo iniciado para atender a 127.0.0.1:49874
@@ -104,7 +60,12 @@ void *hilo_trabajador(void *arg) {
 
             send(cliente_fd, encabezado, strlen(encabezado), 0);
             send(cliente_fd, contenido, tam_contenido, 0);
-
+            // --- LÍNEA CRÍTICA A AÑADIR ---
+            // El contenido de las imágenes se carga directamente desde el disco
+            // y no es parte del buffer, por lo que su memoria DEBE ser liberada aquí.
+            if (extension && (strcmp(extension, ".png") == 0 || strcmp(extension, ".jpg") == 0 || strcmp(extension, ".jpeg") == 0 || strcmp(extension, ".gif") == 0)) {
+                free(contenido);
+            }
             // [TRABAJADOR] Recurso 'index.html' servido con éxito. Estado 200 OK.
             printf("[TRABAJADOR %p] Recurso '%s' servido con éxito. Estado 200 OK.\n", (void*)pthread_self(), ruta);
 

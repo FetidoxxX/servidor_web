@@ -1,61 +1,14 @@
 // =======================================================
 // ARCHIVO: servidor.c 
 // =======================================================
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
-#include <arpa/inet.h>
-#include <pthread.h>
-#include <signal.h>
-#include <errno.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
+#include "servidor_web.h"
 
-#define PUERTO_DEFECTO 8000 // Puerto por defecto
-#define IP_DEFECTO "0.0.0.0"//IP por defecto escucha en todas las interfaces | (127.0.0.1)local (172.22.163.74)miMakina 
-#define MAX_CONEXIONES 10
-#define MAX_PAGINAS 7
-
-// --- Estructuras y variables globales ---
-
-// Estructuras duplicadas
-typedef struct {
-    char *nombre_archivo;
-    char *contenido;
-    size_t tamano;
-    long long ultimo_acceso;
-} Pagina;
-
-typedef struct {
-    Pagina paginas[MAX_PAGINAS];
-    int num_paginas;
-    pthread_mutex_t mutex;
-} BufferPaginas;
-
-typedef struct {
-    int servidor_fd;
-    BufferPaginas *buffer_paginas;
-} ServidorArgs;
-
-// Se declara el mutex como externo, la definición está en registro.c
-extern pthread_mutex_t mutex_log;
-
-// Buffer global, su mutex se inicializa en buffer.c
-BufferPaginas buffer_global;
-
-// Flag para controlar el bucle principal de los hilos.
+// --- Definiciones de variables globales ---
+// Estas son las definiciones reales, no declaraciones 'extern'.
+// El header ya las declara como 'extern', así que aquí se les asigna memoria.
 volatile sig_atomic_t servidor_corriendo = 1;
-
-// Declaraciones de funciones
-void *hilo_despachador(void *arg);
-void inicializar_buffer(BufferPaginas *buffer);
-void *hilo_trabajador(void *arg);
-void registrar_conexion(const char *ip, int puerto, const char *pagina_solicitada);
-void cerrar_servidor(int signum);
-
-// File descriptor global del servidor
 int servidor_fd_global;
+BufferPaginas buffer_global;
 
 int main(int argc, char *argv[]) {
     int puerto_escucha = PUERTO_DEFECTO;
@@ -164,6 +117,14 @@ int main(int argc, char *argv[]) {
 void cerrar_servidor(int signum) {
     printf("\n[SERVIDOR] Señal de terminación recibida. Cerrando el servidor...\n");
     servidor_corriendo = 0;
-    // Cerrar el socket para desbloquear el accept() del hilo despachador
-    close(servidor_fd_global);
+    
+    // 1. Liberar la memoria del buffer de páginas
+    liberar_buffer(&buffer_global);
+    
+    // 2. Usar shutdown() para desbloquear accept() de forma segura
+    //    Es más robusto que solo llamar a close().
+    if (servidor_fd_global != -1) {
+        shutdown(servidor_fd_global, SHUT_RDWR);
+        close(servidor_fd_global);
+    }
 }

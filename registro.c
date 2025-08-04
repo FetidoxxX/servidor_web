@@ -1,11 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <time.h>
-#include <pthread.h>
-
-#define LOG_ARCHIVO "log_conexiones.txt"
-
+#include "servidor_web.h"
 // La variable se define una sola vez aquí
 pthread_mutex_t mutex_log = PTHREAD_MUTEX_INITIALIZER;
 
