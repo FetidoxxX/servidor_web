@@ -104,7 +104,8 @@ char *obtener_pagina(BufferPaginas *buffer, const char *ruta, size_t *tam_out) {
             *tam_out = imagen_temp.tamano;
             // [BUFFER] Imágen cargada directamente desde el disco, no se usa el buffer
             printf("[BUFFER] Sirviendo imagen '%s' directamente del disco.\n", nombre_solicitado);
-            return imagen_temp.contenido;
+            free(imagen_temp.nombre_archivo); 
+            return imagen_temp.contenido; 
         }
         // Si no se encuentra, devuelve NULL.
         return NULL;
